@@ -1,10 +1,9 @@
 const config = require('../config')
-const {Client} = require("pg")
+// const {Client} = require("pg")
 const {Sequelize} = require("sequelize")
 
-async function connect (){
 
-    const sequelize = new Sequelize({
+module.exports = new Sequelize({
         database: config.name,
         username: config.user,
         password: config.password,
@@ -17,16 +16,6 @@ async function connect (){
             rejectUnauthorized: false 
           }
         },
-      });
+});
 
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-      } catch (error) {
-        console.error('Unable to connect to the database:', error);
-      }
-
-
-}
-
-module.exports = {connect};
+    
