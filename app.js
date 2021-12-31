@@ -1,4 +1,5 @@
 const express = require('express')
+const db = require('./db/connection')
 
 const app = express()
 
@@ -11,8 +12,9 @@ app.get('/', (req,res) =>{
 
 })
 
-app.listen(PORT,() => {
+app.listen(PORT, async () => {
 
+    await db.connect()
     console.log(`server listening on port ${PORT}`)
 
 })
