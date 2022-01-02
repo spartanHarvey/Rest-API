@@ -1,9 +1,11 @@
 const router = require('express').Router()
 const User = require('../db/models/User')
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
+const config = require('../config')
+const jwtStorage = require('../jwt/jwt');
+const authMiddleware = require('../middleware/authMiddleware');
 
-
-//register route
 router.post('/register', async (req,res)=>{
 
     const newUser = await User.build({
@@ -13,12 +15,11 @@ router.post('/register', async (req,res)=>{
     });
 
  
-    
     try{
         
-        const user = await User.findAll({ where: {email:newUser.email}})
+        const user = await User.findOne({ where: {email:newUser.email}})
 
-        if(user.length > 0 ){ 
+        if(user){ 
             
             return res.status(409).send({"error":"Email taken"})
            
@@ -49,12 +50,10 @@ router.post('/login', async(req,res,next)=>{
     const email = req.body.email;
     const password = req.body.password;
     
-    // if(!email || !password) {res.status(409).send({"error":"missing fields"}); return;}
     if(!email || !password) {
         
 
-        if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"missing fields"});
-        res.redirect('/'); return;
+        return res.status(409).send({"error":"missing fields"});
     
     }
 
@@ -62,37 +61,33 @@ router.post('/login', async(req,res,next)=>{
     
     
     try{
-        const user = await User.findOne({email:email});
+        const user = await User.findOne({where: {email:email}});
       
         if(!user){
            
-            if(process.env.NODE_ENV === 'test') return res.status(404).send({"error":'account no found'});
-           return res.redirect('/');
+            return res.status(404).send({"error":'account no found'});
+          
                     
         }
         const validPassword = await bcrypt.compare(password, user.password)
         
 
-            if(validPassword) {
+        if(validPassword) {
                 
-                req.session['currentUser'] = user; 
-                
-                // req.session.save()
-                if(process.env.NODE_ENV === 'test') return res.status(200).send({"msg":"logged in",user});
-                // res.status(200).send(req.session);
-                res.redirect(`/home/${user._id}`);
-            }
+            const token = jwt.sign(user.dataValues,config.jwt_token)
+            jwtStorage.tokenStorage.push(token)
+            console.log(jwtStorage.tokenStorage)
+            return res.status(200).send({"msg":"logged in",token});
+               
+        }
         else{
-            if(process.env.NODE_ENV === 'test') return res.status(400).send({"error":'wrong password'});
-            res.redirect('/');
-
-            return;
+            return res.status(400).send({"error":'wrong password'});
+                      
         }
 
     }catch(err){
 
-        console.log(err);
-        res.status(404).send(err);
+        res.status(400).send(err.message);
 
     }
 
@@ -102,16 +97,12 @@ router.post('/login', async(req,res,next)=>{
 
 
 
-router.get('/logout', (req, res) => {
+router.get('/logout',authMiddleware, (req, res) => {
 
-    req.session.destroy((err) => {
-        if (err) {
-            return console.log(err);
-        }
+    const token = req.headers['auth']
+    jwtStorage.tokenStorage = jwtStorage.tokenStorage.filter(item =>{ return item != token})
 
-        if(process.env.NODE_ENV === 'test') return res.status(200).send({"msg":"logged out"});
-        res.redirect('/');
-    });
+    res.send({"msg":"you have logout successfully!"})
 });
 
 
