@@ -5,10 +5,12 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 const jwtStorage = require('../jwt/jwt');
 const authMiddleware = require('../middleware/authMiddleware');
+const { v4: uuidv4 } = require('uuid');
 
 router.post('/register', async (req,res)=>{
 
     const newUser = await User.build({
+        id: uuidv4(),
         name: req.body.name,
         email: req.body.email,
         password: req.body.password

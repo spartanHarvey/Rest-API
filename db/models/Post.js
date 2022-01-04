@@ -1,6 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, models } = require('sequelize');
 const db = require('../connection')
-const { v4: uuidv4 } = require('uuid');
 const User = require('./User');
 
 
@@ -8,7 +7,7 @@ const Post = db.define('Post', {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
-    defaultValue:  uuidv4()
+    unique: true
 
 },
   title: {
@@ -25,14 +24,15 @@ const Post = db.define('Post', {
   whoPosted: {
     type: DataTypes.UUID,
     references: {
-      model: 'Posts',
-      key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      model: User,
+      key: 'id'
     }
   }
 });
 
 
+// Post.belongsTo('User', {foreignKey: 'whoPosted', onDelete: 'cascade', hooks: 'true' })
+// }
+// Post.associate = () => {
 Post.sync({force: true});
-Post.belongsTo(User, {foreignKey: 'whoPosted', onDelete: 'cascade', hooks: 'true' })
 module.exports = Post;
