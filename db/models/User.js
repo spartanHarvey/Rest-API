@@ -1,7 +1,7 @@
-const { Sequelize, DataTypes, models } = require('sequelize');
+const { Sequelize, DataTypes} = require('sequelize');
 const db = require('../connection')
-const { v4: uuidv4 } = require('uuid');
-
+const Post = require('./Post.js')
+const Comment = require('./Comment.js')
 
 const User =  db.define('User', {
 
@@ -15,6 +15,10 @@ const User =  db.define('User', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  username:{
+    type: DataTypes.STRING,
+    unique:true
+  },
   email: {
     type: Sequelize.STRING,
     allowNull: false
@@ -24,12 +28,13 @@ const User =  db.define('User', {
       allowNull: false
 
   }
-},{initialAutoIncrement: 1000});
+});
 
-User.associate = ()=> {
-  User.hasMany(models.Post,{
-    onDelete: "cascade"
-  })
-}
-User.sync({force: true});
+(async () => {
+  await User.sync({force: true});
+  User.hasMany(Post,{foreignKey:"owner",onDelete: 'cascade',onUpdate:'cascade', hooks: 'true' })
+  User.hasMany(Comment,{foreignKey:"owner",onDelete: 'cascade',onUpdate:'cascade', hooks: 'true' })
+
+})()
+// start()
 module.exports = User;

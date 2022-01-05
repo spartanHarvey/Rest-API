@@ -6,7 +6,7 @@ const moment = require('moment')
 
         let dbFetchResults 
         try{
-            dbFetchResults = await model.findAll({where: {whoPosted:req.user.id}})
+            dbFetchResults = await model.findAll({where: {owner:req.user.id}})
             
             if(!dbFetchResults){
                 

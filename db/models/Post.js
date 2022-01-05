@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, models } = require('sequelize');
+const { Sequelize, DataTypes} = require('sequelize');
 const db = require('../connection')
 const User = require('./User');
 
@@ -11,28 +11,30 @@ const Post = db.define('Post', {
 
 },
   title: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   description: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   photo: {
-      type: Sequelize.BLOB
+      type: DataTypes.ARRAY(DataTypes.BLOB)
   },
-  whoPosted: {
+  owner: {
     type: DataTypes.UUID,
-    references: {
-      model: User,
-      key: 'id'
-    }
   }
 });
 
 
-// Post.belongsTo('User', {foreignKey: 'whoPosted', onDelete: 'cascade', hooks: 'true' })
-// }
-// Post.associate = () => {
-Post.sync({force: true});
+
+
+const start = async () => {
+  await Post.sync({force: true});
+  Post.belongsTo(db.models.User,{foreignKey:"owner",onDelete: 'cascade', onUpdate:'cascade' ,hooks: 'true' })
+  Post.hasMany(db.models.Comment,{foreignKey:"postId",onDelete: 'cascade',onUpdate:'cascade' ,hooks: 'true' })
+
+}
+start()
+
 module.exports = Post;

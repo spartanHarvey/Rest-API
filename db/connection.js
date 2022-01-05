@@ -1,5 +1,4 @@
 const config = require('../config')
-// const {Client} = require("pg")
 const {Sequelize} = require("sequelize")
 
 

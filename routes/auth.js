@@ -9,9 +9,10 @@ const { v4: uuidv4 } = require('uuid');
 
 router.post('/register', async (req,res)=>{
 
-    const newUser = await User.build({
+    const newUser = User.build({
         id: uuidv4(),
         name: req.body.name,
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password
     });
@@ -27,7 +28,6 @@ router.post('/register', async (req,res)=>{
            
         
         };
-        // req.session['currentUser'] = newUser;
         newUser.password = await bcrypt.hash(newUser.password, 10);  
         newUser.save();
         
