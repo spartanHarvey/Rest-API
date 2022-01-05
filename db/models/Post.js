@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes} = require('sequelize');
+const { DataTypes} = require('sequelize');
 const db = require('../connection')
 const User = require('./User');
 
@@ -21,20 +21,18 @@ const Post = db.define('Post', {
   photo: {
       type: DataTypes.ARRAY(DataTypes.BLOB)
   },
-  owner: {
+  ownerId: {
     type: DataTypes.UUID,
   }
 });
 
 
-
-
-const start = async () => {
+(async () => {
   await Post.sync({force: true});
-  Post.belongsTo(db.models.User,{foreignKey:"owner",onDelete: 'cascade', onUpdate:'cascade' ,hooks: 'true' })
+  Post.belongsTo(db.models.User,{foreignKey:"ownerId",onDelete: 'cascade', onUpdate:'cascade' ,hooks: 'true' })
   Post.hasMany(db.models.Comment,{foreignKey:"postId",onDelete: 'cascade',onUpdate:'cascade' ,hooks: 'true' })
 
-}
-start()
+})();
+
 
 module.exports = Post;

@@ -9,22 +9,9 @@ const pagination = require('../middleware/pagination');
 
 router.get('/all',authMiddleware, pagination(Post), async(req,res)=> {
 
-    // try{
-    //     const posts = await Post.findAll({where: {whoPosted:req.user.id}})
-        
-    //     if(!posts){
-            
-    //         return res.status(404).send({"error":"no post was found"});
-        
-    //     }
-        
-    //     console.log(posts)
-        return res.status(200).send(res.results);
 
-    // }catch(err){
-
-    //     res.status(500).send(err.message);
-    // }
+        // if(!req.results) return res.status(404).send({"error":"no post was found"});
+    return res.status(200).send(res.results);
 
 });
 
@@ -59,7 +46,7 @@ router.post('/',authMiddleware, async(req,res) => {
             id: uuidv4(),
             title: req.body.title,
             description: req.body.description,
-            owner:req.user.id,
+            ownerId:req.user.id,
             photo: req.files ? req.files.image : null
     
         })

@@ -6,11 +6,10 @@ const moment = require('moment')
 
         let dbFetchResults 
         try{
-            dbFetchResults = await model.findAll({where: {owner:req.user.id}})
+            dbFetchResults = await model.findAll({where: {ownerId:req.user.id}})
             
-            if(!dbFetchResults){
-                
-                return res.status(404).send({"error":"no post was found"});
+            if(dbFetchResults.length == 0){
+                return res.status(404).send({"error":`No ${model.tableName} were found`});
             
             }
             

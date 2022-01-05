@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes} = require('sequelize');
+const {  DataTypes} = require('sequelize');
 const db = require('../connection')
 const Post = require('./Post.js')
 const Comment = require('./Comment.js')
@@ -12,7 +12,7 @@ const User =  db.define('User', {
 
   },
   name: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   username:{
@@ -20,11 +20,11 @@ const User =  db.define('User', {
     unique:true
   },
   email: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   password: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false
 
   }
@@ -32,9 +32,9 @@ const User =  db.define('User', {
 
 (async () => {
   await User.sync({force: true});
-  User.hasMany(Post,{foreignKey:"owner",onDelete: 'cascade',onUpdate:'cascade', hooks: 'true' })
-  User.hasMany(Comment,{foreignKey:"owner",onDelete: 'cascade',onUpdate:'cascade', hooks: 'true' })
+  User.hasMany(Post,{foreignKey:"ownerId",onDelete: 'cascade',onUpdate:'cascade', hooks: 'true' })
+  User.hasMany(Comment,{foreignKey:"ownerId",onDelete: 'cascade',onUpdate:'cascade', hooks: 'true' })
 
-})()
-// start()
+})();
+
 module.exports = User;

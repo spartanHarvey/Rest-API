@@ -1,6 +1,5 @@
-const { Sequelize, DataTypes} = require('sequelize');
+const { DataTypes} = require('sequelize');
 const db = require('../connection')
-const User = require('./User');
 
 
 const Comment = db.define('Comment', {
@@ -18,19 +17,18 @@ const Comment = db.define('Comment', {
     type: DataTypes.UUID,
     allowNull: false
   },
-  owner: {
+  ownerId: {
     type: DataTypes.UUID,
   }
 });
 
 
 
-const start = async () => {
+(async () => {
   await Comment.sync({force: true});
-  Comment.belongsTo(db.models.User,{foreignKey:"owner",onDelete: 'cascade',onUpdate:'cascade' , hooks: 'true' })
+  Comment.belongsTo(db.models.User,{foreignKey:"ownerId",onDelete: 'cascade',onUpdate:'cascade' , hooks: 'true' })
   Comment.belongsTo(db.models.Post,{foreignKey:"postId",onDelete: 'cascade',onUpdate:'cascade' , hooks: 'true' })
 
-}
-start()
+})();
 
 module.exports = Comment;
