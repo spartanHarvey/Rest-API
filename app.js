@@ -17,6 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 
+
+app.get('/', cors(), (req,res)=>{ return res.send("Welcome to the first page")})
 app.use('/api/auth',cors(),authRoute);
 app.use('/api/posts',cors(),postRoute);
 app.use('/api/comments',cors(),commentRoute);
