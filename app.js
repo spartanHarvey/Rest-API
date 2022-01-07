@@ -9,7 +9,9 @@ const bodyParser = require('body-parser');
 const User = require('./db/models/User')
 const Post= require('./db/models/Post')
 const fileUpload = require('express-fileupload')
-const PORT = 9000
+const config = require('../config')
+
+const PORT = config.port
 app.use(cors())
 app.use(express.json());
 app.use(bodyParser.json());
