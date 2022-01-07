@@ -11,7 +11,7 @@ const Post= require('./db/models/Post')
 const fileUpload = require('express-fileupload')
 const config = require('../config')
 
-const PORT = config.port
+const PORT = process.env.port
 app.use(cors())
 app.use(express.json());
 app.use(bodyParser.json());
