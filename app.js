@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 
-app.get('/', cors(), (req,res)=>{ retun res.send("Welcome to main route")})
+// app.get('/', cors(), (req,res)=>{ retun res.send("Welcome to main route")})
 app.use('/api/auth',cors(),authRoute);
 app.use('/api/posts',cors(),postRoute);
 app.use('/api/comments',cors(),commentRoute);
