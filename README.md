@@ -6,13 +6,13 @@ For requeriment 1 I created an expressJS server and and a Postgres database whic
 I implemented an **auth** route with the following end points: 
 
 * POST /api/auth/register <br>
-![registration](/images/register.JPG)
+![registration](/screenshots/register.JPG)
 
 * POST /api/auth/login <br>
-![login](/images/login.JPG)
+![login](/screenshots/login.JPG)
 
 * GET /api/auth/logout <br>
-![logout](/images/logout.JPG)
+![logout](/screenshots/logout.JPG)
 
 Those endpoints will be used to authenticate users as shown above. After a user login in, a jwt is generated and returned. this token is used to authorize the user
 to differents routes. It is sent as **auth** in the request headers.
@@ -27,16 +27,16 @@ For requeriment 2, I implemented the post functionality.
 I created a route **posts** with the following endpoints:
 
 * GET /api/posts <br>
-![get single post](/images/singlePosts.JPG)
+![get single post](/screenshots/singlePost.JPG)
 
 * GET /api/posts/all <br>
-![get all posts](/images/allPost.JPG)
+![get all posts](/screenshots/allPost.JPG)
 
 * POST /api/posts <br>
-![make a post](/images/makePost.JPG)
+![make a post](/screenshots/makePost.JPG)
 
 * PUT /api/posts <br>
-![edit a post](/images/editPost.JPG)
+![edit a post](/screenshots/editPost.JPG)
 
 All posts have an attribute **createdAt**. I made use of a trird party package called moment
 to calculate the time elapsed in convesional time when a post is fetched. 
@@ -59,16 +59,16 @@ So,
 I created a route **comments** with the following endpoints:
 
 * GET /api/comments <br>
-![get single comment](/images/singleComment.JPG)
+![get single comment](/screenshots/singleComment.JPG)
 
 * GET /api/comments/all <br>
-![get all comments](/images/allComment.JPG)
+![get all comments](/screenshots/allComment.JPG)
 
 * POST /api/comments <br>
-![make a comment](/images/makeComment.JPG)
+![make a comment](/screenshots/makeComment.JPG)
 
 * PUT /api/comments <br>
-![edit a comment](/images/editComment.JPG)
+![edit a comment](/screenshots/editComment.JPG)
 
 When returning all Comments/Posts from the API we can pass **pageNumber** and **offSet**, as query parameters, to paginate them.
 to get a single comment **comment_id** needs to be passed in the query params
