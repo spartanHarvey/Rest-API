@@ -4,7 +4,7 @@ const Post = require('../db/models/Post')
 const authMiddleware = require('../middleware/authMiddleware')
 const { v4: uuidv4 } = require('uuid');
 const pagination = require('../middleware/pagination');
-// var moment = require('moment'); 
+var moment = require('moment'); 
 
 
 router.get('/all',authMiddleware, pagination(Comment), async(req,res)=> {
@@ -16,6 +16,7 @@ router.get('/all',authMiddleware, pagination(Comment), async(req,res)=> {
 
 router.get('/',authMiddleware, async(req,res)=> {
 
+    if(!req.query.comment_id) return res.send({"error":"missing comment id"})
      try{
          const comment = await Comment.findOne({where: {id:req.query.comment_id}})
          
@@ -25,7 +26,7 @@ router.get('/',authMiddleware, async(req,res)=> {
          
          }
          
-             
+        
          return res.status(200).send(comment);
  
      }catch(err){
@@ -37,8 +38,10 @@ router.get('/',authMiddleware, async(req,res)=> {
 
 router.post('/',authMiddleware, async(req,res) => {
 
+    if(!req.query.post_id) return res.send({"error":"missing postid"})
+
     const count = await Post.count({where:{ id: req.query.post_id}})
-    if(count == 0 ) return res.send({"msg":"Failed to comment due to post no longer exist"})
+    if(count == 0 ) return res.send({"error":"Failed to comment due to post no longer exist"})
     try{
         
         const comment =  Comment.build({
@@ -66,15 +69,20 @@ router.post('/',authMiddleware, async(req,res) => {
 
 router.put('/',authMiddleware, async (req,res) => {
 
+    if(!req.query.comment_id) return res.send({"error":"missing comment id"})
+    if(!req.body.comment){ return res.send({"error":"missing fields"})}
 
     try{
         
         const comment = await Comment.findOne({where: {id:req.query.comment_id}})
-        const fieldsToBeUpdated = []
-        if(req.body.comment){comment.comment = req.body.comment; fieldsToBeUpdated.push("comment")}
         
+        if(!comment) return res.send({"error":"invalid comment id"})
+        
+        const fieldsToBeUpdated = []
+        comment.comment = req.body.comment; fieldsToBeUpdated.push("comment")
         comment.save({fields: fieldsToBeUpdated});
         delete fieldsToBeUpdated;
+        
         return res.status(201).send(comment);
     }
     catch(err){

@@ -18,9 +18,8 @@ const moment = require('moment')
     
             res.status(500).send(err.message);
         }
-        
-        const pageNumber = parseInt(req.query.pageNumber);
-        const offSet = parseInt(req.query.offSet)
+        const pageNumber = req.query.pageNumber? parseInt(req.query.pageNumber): 1;
+        const offSet = req.query.offSet? parseInt(req.query.offSet): dbFetchResults.length;
 
         const previousPage = (pageNumber - 1) * offSet
         const nextPage = pageNumber * offSet

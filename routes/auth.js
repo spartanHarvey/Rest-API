@@ -9,6 +9,8 @@ const { v4: uuidv4 } = require('uuid');
 
 router.post('/register', async (req,res)=>{
 
+    if(!req.body.name || !req.body.email || !req.body.password) return res.send({"error":"missing fields"})
+    
     const newUser = User.build({
         id: uuidv4(),
         name: req.body.name,
@@ -49,18 +51,12 @@ router.post('/register', async (req,res)=>{
 
 router.post('/login', async(req,res,next)=>{
      
+    if(!req.body.email) return res.send({"error":"missing email"})
+    if(!req.body.password) return res.send({"error":"missing password"})
+    
     const email = req.body.email;
     const password = req.body.password;
-    
-    if(!email || !password) {
         
-
-        return res.status(409).send({"error":"missing fields"});
-    
-    }
-
-
-    
     
     try{
         const user = await User.findOne({where: {email:email}});
