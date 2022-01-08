@@ -5,13 +5,13 @@
 For requeriment 1 I created an expressJS server and and a Postgres database which I hosted on Heroku.
 I implemented an **auth** route with the following end points: 
 
-* /api/auth/register <br>
+* POST /api/auth/register <br>
 ![registration](/images/register.JPG)
 
-* /api/auth/login <br>
+* POST /api/auth/login <br>
 ![login](/images/login.JPG)
 
-* /api/auth/logout <br>
+* GET /api/auth/logout <br>
 ![logout](/images/logout.JPG)
 
 Those endpoints will be used to authenticate users as shown above. After a user login in, a jwt is generated and returned. this token is used to authorize the user
