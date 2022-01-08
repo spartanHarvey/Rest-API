@@ -39,6 +39,7 @@ router.get('/',authMiddleware, async(req,res)=> {
 router.post('/',authMiddleware, async(req,res) => {
 
     if(!req.query.post_id) return res.send({"error":"missing postid"})
+    if(!req.body.comment) return res.send({"error":"missing fields"})
 
     const count = await Post.count({where:{ id: req.query.post_id}})
     if(count == 0 ) return res.send({"error":"Failed to comment due to post no longer exist"})

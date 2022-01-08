@@ -25,16 +25,9 @@ router.get('/',authMiddleware, async(req,res)=> {
          
          }
          
+        let createdAt =  moment(post.dataValues.createdAt).fromNow()
+        const postWithTime = {...post.dataValues, createdAt };
          
-         const postWithTime = post.map(item => {
-
-            let createdAt = item.dataValues.createdAt
-            createdAt = moment(item.createdAt).fromNow()
-           
-              return {...item.dataValues, createdAt };
-            
-          
-          });
          return res.status(200).send(postWithTime);
  
      }catch(err){
@@ -55,7 +48,7 @@ router.post('/',authMiddleware, async(req,res) => {
             title: req.body.title,
             description: req.body.description,
             ownerId:req.user.id,
-            photo: req.files ? req.files.image : null
+            photo: req.files ?[req.files.image] : null
     
         })
 
