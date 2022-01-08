@@ -70,7 +70,7 @@ router.post('/',authMiddleware, async(req,res) => {
 router.put('/',authMiddleware, async (req,res) => {
 
     if(!req.query.post_id) return res.send({"error":"missing post id"})
-    if(!req.body.title || !req.body.description) return res.send({"error":"missing fields"})
+    if(!req.body.title && !req.body.description) return res.send({"error":"missing fields"})
 
     try{
         
