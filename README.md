@@ -74,3 +74,5 @@ When returning all Comments/Posts from the API we can pass **pageNumber** and **
 to get a single comment **comment_id** needs to be passed in the query params
 
 Lastly, I deployed my server on AWS EB using AWS codePipeline which is a continuous integration tool. then I configured the load balancer to allow inbound HTTP requests.
+
+URL: http://divercitycodingquestionenv-env.eba-tvh2zeyt.us-east-2.elasticbeanstalk.com/
